@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_facebook/config/palette.dart';
+import '../config/palette.dart';
 
 class RoundedIconButton extends StatelessWidget {
   final IconData icon;

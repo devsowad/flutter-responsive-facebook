@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:responsive_facebook/config/palette.dart';
-import 'package:responsive_facebook/models/models.dart';
-import 'package:responsive_facebook/widgets/profile_avatar.dart';
+import '../config/palette.dart';
+import '../models/models.dart';
+import 'profile_avatar.dart';
+import 'responsive.dart';
 
 class Rooms extends StatelessWidget {
   final List<User> onlineUsers;
@@ -10,26 +11,35 @@ class Rooms extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 60,
-      color: Palette.whiteColor,
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-        scrollDirection: Axis.horizontal,
-        itemCount: 1 + onlineUsers.length,
-        itemBuilder: (BuildContext context, int index) {
-          if (index == 0) {
-            return const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 8),
-              child: _CreateRoomButton(),
+    final isDesktop = Responsive.isDesktop(context);
+
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: isDesktop ? 5 : 0),
+      elevation: isDesktop ? 1 : 0,
+      shape: isDesktop
+          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+          : null,
+      child: Container(
+        height: 60,
+        color: Palette.whiteColor,
+        child: ListView.builder(
+          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+          scrollDirection: Axis.horizontal,
+          itemCount: 1 + onlineUsers.length,
+          itemBuilder: (BuildContext context, int index) {
+            if (index == 0) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8),
+                child: _CreateRoomButton(),
+              );
+            }
+            final User user = onlineUsers[index - 1];
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: ProfileAvatar(imageUrl: user.imageUrl),
             );
-          }
-          final User user = onlineUsers[index - 1];
-          return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4),
-            child: ProfileAvatar(imageUrl: user.imageUrl),
-          );
-        },
+          },
+        ),
       ),
     );
   }
@@ -42,14 +52,6 @@ class _CreateRoomButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextButton(
       onPressed: () {},
-      // style: TextButton.styleFrom(
-      //   primary: Colors.white,
-      //   // shape: RoundedRectangleBorder(
-      //   //   borderRadius: BorderRadius.circular(30),
-      //   // ),
-      //    shape: OutlinedBorder(side: BorderSide(color: Colors.black,width: 2)),
-      //   backgroundColor: Palette.whiteColor,
-      // ),
       style: ButtonStyle(
         shape: MaterialStateProperty.all<RoundedRectangleBorder>(
           RoundedRectangleBorder(
@@ -70,7 +72,7 @@ class _CreateRoomButton extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 4),
-          const Text(
+          const SelectableText(
             'Create\nRoom',
             style: TextStyle(fontSize: 12),
           ),

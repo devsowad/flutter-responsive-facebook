@@ -1,4 +1,4 @@
-import 'package:responsive_facebook/models/models.dart';
+import '../models/models.dart';
 
 const User currentUser = User(
   name: 'Marcus Ng',

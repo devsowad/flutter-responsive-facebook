@@ -1,10 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:responsive_facebook/config/palette.dart';
-import 'package:responsive_facebook/models/models.dart';
-import 'package:responsive_facebook/widgets/profile_avatar.dart';
-import 'package:responsive_facebook/widgets/rounded_icon_button.dart';
+import '../config/palette.dart';
+import '../models/models.dart';
+import 'profile_avatar.dart';
+import 'responsive.dart';
+import 'rounded_icon_button.dart';
 
 class PostContainer extends StatelessWidget {
   final Post post;
@@ -16,37 +17,48 @@ class PostContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      margin: const EdgeInsets.symmetric(vertical: 5),
-      color: Palette.whiteColor,
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _PostHeader(post: post),
-                const SizedBox(height: 4),
-                Text(post.caption),
-                post.imageUrl != null
-                    ? const SizedBox.shrink()
-                    : const SizedBox(height: 6),
-              ],
+    final isDesktop = Responsive.isDesktop(context);
+
+    return Card(
+      margin: EdgeInsets.symmetric(
+        vertical: 5,
+        horizontal: isDesktop ? 5 : 0,
+      ),
+      elevation: isDesktop ? 1 : 0,
+      shape: isDesktop
+          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+          : null,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        color: Palette.whiteColor,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _PostHeader(post: post),
+                  const SizedBox(height: 4),
+                  SelectableText(post.caption),
+                  post.imageUrl != null
+                      ? const SizedBox.shrink()
+                      : const SizedBox(height: 6),
+                ],
+              ),
             ),
-          ),
-          post.imageUrl != null
-              ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: CachedNetworkImage(imageUrl: post.imageUrl!),
-                )
-              : const SizedBox.shrink(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: _PostStats(post: post),
-          ),
-        ],
+            post.imageUrl != null
+                ? Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: CachedNetworkImage(imageUrl: post.imageUrl!),
+                  )
+                : const SizedBox.shrink(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: _PostStats(post: post),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -67,13 +79,13 @@ class _PostHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              SelectableText(
                 post.user.name,
                 style: const TextStyle(fontWeight: FontWeight.w600),
               ),
               Row(
                 children: [
-                  Text(
+                  SelectableText(
                     '${post.timeAgo} · ',
                     style: const TextStyle(
                       color: Palette.darkGreyColor,
@@ -129,17 +141,17 @@ class _PostStats extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 4),
-            Text(
+            SelectableText(
               post.likes.toString(),
               style: const TextStyle(color: Palette.darkGreyColor),
             ),
             const Spacer(),
-            Text(
+            SelectableText(
               '${post.comments} Comments',
               style: const TextStyle(color: Palette.darkGreyColor),
             ),
             const SizedBox(width: 8),
-            Text(
+            SelectableText(
               '${post.shares} Shares',
               style: const TextStyle(color: Palette.darkGreyColor),
             ),

@@ -1,7 +1,9 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_facebook/config/palette.dart';
-import 'package:responsive_facebook/screens/screens.dart';
+import 'config/palette.dart';
+import 'config/theme.dart';
+import 'screens/screens.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +18,21 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Facebook UI',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        primaryColor: Palette.facebookBlue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
-        scaffoldBackgroundColor: Palette.scaffold,
-        textTheme: GoogleFonts.robotoTextTheme(),
-      ),
+      theme: themeData,
+      scrollBehavior: MyCustomScrollBehavior(),
       home: const NavScreen(),
     );
   }
+}
+
+class MyCustomScrollBehavior extends MaterialScrollBehavior {
+  // Override behavior methods and getters like dragDevices
+  @override
+  Set<PointerDeviceKind> get dragDevices => {
+        PointerDeviceKind.touch,
+        PointerDeviceKind.mouse,
+        PointerDeviceKind.invertedStylus,
+        PointerDeviceKind.unknown,
+        PointerDeviceKind.stylus,
+      };
 }

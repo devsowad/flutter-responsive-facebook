@@ -1,9 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:responsive_facebook/config/palette.dart';
-import 'package:responsive_facebook/models/models.dart';
-import 'package:responsive_facebook/widgets/profile_avatar.dart';
-import 'package:responsive_facebook/widgets/rounded_icon_button.dart';
+import '../config/palette.dart';
+import '../models/models.dart';
+import 'profile_avatar.dart';
+import 'responsive.dart';
+import 'rounded_icon_button.dart';
 
 class Stories extends StatelessWidget {
   final User currentUser;
@@ -19,7 +20,9 @@ class Stories extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 200,
-      color: Palette.whiteColor,
+      color: Responsive.isDesktop(context)
+          ? Colors.transparent
+          : Palette.whiteColor,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(
@@ -76,6 +79,15 @@ class _StoryCard extends StatelessWidget {
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               gradient: Palette.storyGradient,
+              boxShadow: Responsive.isDesktop(context)
+                  ? const [
+                      BoxShadow(
+                        color: Colors.black26,
+                        offset: Offset(0, 2),
+                        blurRadius: 4,
+                      )
+                    ]
+                  : null,
             ),
           ),
           isCreateStory
